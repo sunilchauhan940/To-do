@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>To do List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="style.css" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="responsive.css" type="text/css" charset="utf-8">
+    <link href='https://fonts.googleapis.com/css?family=Lexend+Mega&family=Yusei+Magic&display=swap"' rel='stylesheet'
+        type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 content">
+                <button class="btn btn-default btn-primary add"><i class="fa fa-plus"></i> Add
+                    New Task</button>
+                <div class="dialog" style="display:none">
+                    <div class="title">Add Task</div>
+                    <div class="dialog-content">
+                        <input id="new-task-text" type="text" placeholder="Title" />
+                        <input id="priority" type="text" placeholder="Set Priority (Optional)"
+                            onkeypress="return onlynumber(event)" />
+                        <input id="due-date" type="text" onfocus="(this.type='date')" placeholder="Due Date (Optional):"
+                            onkeydown="return false" />
+                        <button class="btn btn-default btn-primary" id="add-task">Add</button>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="header">
+                    <h3>To-do List</h3>
+                </div>
+                <hr>
+                <div id="items">
+                    <!-- <div class="row">
+                        <div class="col-xs-4">
+                            <input type="checkbox" id = "checkitem" />
+                            <input type="text" value=" Task 1" disabled />
+                            <div class="col-xs-2">
+                            <label>Due on:</label>
+                            <input type="date" disabled/>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <button class="btn btn-default btn-primary" id="edit-btn">Edit</button>
+                            <button class="btn btn-default btn-primary" id="del-btn">Delete</button>
+                        </div>
+                    </div> -->
+                </div>
+                <br>
+                <!-- <div class="row">
+                    <button class="btn btn-default btn-primary" id="add-task-btn"><i class="fa fa-plus"></i> Add
+                        New Task</button>
+                    <dialog id="addtaskdialog">
+                        <input type="text" id="new-task-text" />
+                        <button class="btn btn-default btn-primary" id="add-task">Add</button>
+                        <button class="btn btn-default btn-primary" id="hide">Close</button>
+                    </dialog>
+                </div>
+                <br>
+                <br> -->
+                <h3>Completed List</h3>
+                <hr>
+                <div id="completed-items">
+                    <!-- <div class="row">
+                <div class="col-sm-5">
+                    <label>Task 1</label>
+                </div>
+                <div class="col-sm-1">
+                    <button class="btn btn-default btn-primary" id="del-btn">Delete</button>
+                </div>
+            </div> -->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+<script type="text/javascript" src="app.js"></script>
+<script>
+    function onlynumber(evt) {
+        var ASCIICode = (evt.which) ? evt.which : evt.keyCode;
+        if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+            return false;
+        return true;
+    }
+
+</script>
+</html>

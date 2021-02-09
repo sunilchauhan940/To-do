@@ -1,0 +1,126 @@
+ *{
+  font-family: 'Lexend Mega', sans-serif;
+  font-style: italic;
+  font-weight: bold;
+}
+body{
+  /* background-color: #971201f3 !important; */
+}
+@media (min-height: 650px){
+  .content{
+    margin-top: 50px;
+    padding: 15px;
+  }
+}
+@media (max-height: 650px){
+  .content{
+    margin-top: 10px;
+    padding: 10px;
+  }
+}
+.content{
+  color:rgb(14, 13, 13);
+  /* background-color: #ece496 !important; */
+}
+hr{
+  background-color: #000000;
+}
+button{
+  background-color: #000000 !important;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+  border: 0px !important;
+}
+#add-task-btn {
+  float: right;
+}
+input[type="text"]{
+  background-color:transparent;
+  border: 0px;
+  padding-right: 15px;
+  color: #000000;
+}
+input[type="date"]{
+  background-color:transparent;
+  color: #8d0404;
+  border: 0px;
+  font-size: xx-small;
+}
+label{
+  font-size:  xx-small;
+}
+#items *{
+    margin: 5px 0;
+}
+#completed-items *{
+  margin: 5px 0;
+}
+#add-task{
+  margin-top: 10px;
+}
+#addtaskdialog{
+  width:50%;
+  color:#000000;
+  border:1px;
+  margin-left: 120px;
+} 
+
+nav {
+  height: auto;
+  background: #000000;
+}
+
+.dialog {
+  background: #fff;
+  display: inline-block;
+  width: auto; 
+  border:2px solid black;
+}
+
+.dialog .title {
+  color: #000;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 4px;
+  margin-top: 8px;
+  padding: 8px 16px;
+  background: #fff;
+  font-size: 16px;
+  line-height:2em;
+  border-top:1px solid black;
+  border-bottom: 1px solid black;
+}
+.dialog .title:first-child {
+  margin-top: -4px;
+}
+.dialog-content{
+  padding: 10px;
+}
+#new-task-text,#due-date,#priority{
+  color: #000000 !important;
+  border: 0;
+  outline: 0;
+  resize: none;
+  margin-top: 10px;
+  width:100%;
+  background-color: #fff;
+  border-bottom: 1px dotted black;
+  font-size: medium;
+}
+
+@keyframes animate { 
+  0% { 
+      opacity: 0.4; 
+  } 
+
+  50% { 
+      opacity: 1; 
+  } 
+
+  100% { 
+      opacity: 0.4; 
+  } 
+} 
+
