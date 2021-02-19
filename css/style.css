@@ -126,6 +126,7 @@
 .toast{
   position: fixed;
   bottom: 30px;
+  width: auto;
 }
 .toast__title{
   letter-spacing: .01428571em;
@@ -137,6 +138,13 @@
   line-height: 1.6;
   word-break: break-word;
 }
+.toast__undo__btn{
+  color: #ffbb00!important;
+  border: none  !important;
+  outline: none  !important;
+  font-style: normal !important;
+  background-color: transparent  !important;
+}
 .empty__bin{
   background-color:white !important;
   color:#1A73E8 !important; 
@@ -146,4 +154,47 @@
   font-size: 14px;
   font-weight: 500;
   line-height: 1.25rem;
+}
+
+
+#countdown {
+  position: relative;
+  margin-left: 10px;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+}
+
+#countdown-number {
+  color: white;
+  display: inline-block;
+  line-height: 40px;
+}
+
+svg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  transform: rotateY(-180deg) rotateZ(-90deg);
+}
+
+svg circle {
+  stroke-dasharray: 113px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: round;
+  stroke-width: 2px;
+  stroke: white;
+  fill: none;
+  animation: countdown 5s linear infinite forwards;
+}
+
+@keyframes countdown {
+  from {
+    stroke-dashoffset: 0px;
+  }
+  to {
+    stroke-dashoffset: 113px;
+  }
 }

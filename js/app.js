@@ -6,6 +6,8 @@ var deleteTaskTitle;
 var deleteCard;
 /** Used to hold Title of Task to be Edited */
 var editTaskTitle;
+/** Used to hold Title of Task to be Undo */
+var undoTaskTitle;
 /** Handlebar Template for Card that Represents Task */
 var taskTemplate = createHandlebar("task-card");
 
@@ -17,6 +19,7 @@ $(document).ready(function () {
 	$('#completed').on('click', showCompleted);
 	$('#bin').on('click', showBinned);
 	$('#new-task-text').on('change', addTask);
+	$('#toast-undo-btn').on('click',undoTask);
 	$('.card-columns').on('click','#del-btn',setBinned);
 	$('.card-columns').on('click','#done-btn',setComplete);
 	$('.card-columns').on('click','#pending-btn',setPending);
@@ -76,14 +79,22 @@ function openDeleteDialog(){
 	$('#confirmdialog').modal('show');
 }
 
+/** Undo Task */
+function undoTask(){
+	$("#toast-bin").toast("hide");
+	changeStatus(undoTaskTitle, "Pending");
+	localStorage.setItem("To_do", JSON.stringify(tasks));
+	showPending();
+}
+
 /** Change status of current task to Binned*/
 function setBinned() {
 	var card = $(this).parent().parent();
-	var title = $(this).parent().find("textarea").val();
-	changeStatus(title, "Binned");
+	undoTaskTitle = $(this).parent().find("textarea").val();
+	changeStatus(undoTaskTitle, "Binned");
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	card.fadeOut(500, cardRemove);
-	$(".toast").toast("show");
+	$("#toast-bin").toast("show");
 }
 
 /** Change status of current task to Complete*/
@@ -232,3 +243,12 @@ function createHandlebar(containerId) {
 	});
 	return Handlebars.compile(template);
 }
+
+/** Code for countdown undo timer  */
+var countdownNumberEl = document.getElementById('countdown-number');
+var countdown = 5;
+countdownNumberEl.textContent = countdown;
+setInterval(function() {
+  countdown = --countdown <= 0 ? 5 : countdown;
+  countdownNumberEl.textContent = countdown;
+}, 1000);

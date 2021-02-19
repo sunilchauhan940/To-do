@@ -47,11 +47,13 @@
             <div class="col-md-8 content">
                 <div class="row">
                     <div class="input-group">
-                        <input class="form-control py-2 border" type="text" placeholder="What you want to do?" id="new-task-text" class="new_task_text" />
+                        <input class="form-control py-2 border" type="text" placeholder="What you want to do?"
+                            id="new-task-text" class="new_task_text" />
                     </div>
                 </div>
                 <br>
-                <button class="btn btn-default empty__bin" id="empty-bin">Empty Bin  <i class="fa fa-trash" aria-hidden="true"></i></button>
+                <button class="btn btn-default empty__bin" id="empty-bin">Empty Bin <i class="fa fa-trash"
+                        aria-hidden="true"></i></button>
                 <div class="dropdown float-right">
                     <button class="btn btn-secondary dropdown-toggle bg-warning" style="border:none" type="button"
                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -61,16 +63,19 @@
                         <button class="dropdown-item" id="pending">Pending</button>
                         <button class="dropdown-item" id="completed">Completed</button>
                         <button class="dropdown-item" id="bin">Bin</button>
-                                    <!-- <a class="dropdown-item" href="#">Important</a> -->
+                        <!-- <a class="dropdown-item" href="#">Important</a> -->
                     </div>
                 </div>
                 <br>
                 <br>
                 <div id="empty-bg">
                     <div class="page_bg_img"></div>
-                    <h3 class="text-center page_bg_text" id="title-bin" style="display: none;">Tasks in Bin remain Here</h3>
-                    <h3 class="text-center page_bg_text" id="title-complete" style="display: none;">Completed Tasks remain Here</h3>
-                    <h3 class="text-center page_bg_text" id="title-pending" style="display: none;">Tasks You Add Appear Here</h3>
+                    <h3 class="text-center page_bg_text" id="title-bin" style="display: none;">Tasks in Bin remain Here
+                    </h3>
+                    <h3 class="text-center page_bg_text" id="title-complete" style="display: none;">Completed Tasks
+                        remain Here</h3>
+                    <h3 class="text-center page_bg_text" id="title-pending" style="display: none;">Tasks You Add Appear
+                        Here</h3>
                 </div>
                 <div class="container cards">
                     <div class="card-columns">
@@ -98,38 +103,56 @@
                 <br>
                 <!--toast-->
 
-                <div class="toast" data-delay="2000" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast" id="toast-bin" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header" style="background-color: black; color: white;">
                         <div class="toast-body toast__title">
                             Task is Binned
+                        </div>
+                        <button class="btn-flat toast-action toast__undo__btn" id="toast-undo-btn">Undo</button>
+                        <div id="countdown">
+                            <div id="countdown-number"></div>
+                            <svg>
+                            <circle r="18" cx="20" cy="20"></circle>
+                            </svg>
+                        </div>
+                        <!-- <button type="button" class="ml-2 mb-1 close" aria-label="Close" data-dismiss="toast">
+                            <span aria-hidden="true" style="color:#fff;">&times;</span>
+                        </button> -->
+                    </div>
+                </div>
+                <!-- <div class="toast" id="toast-undo" data-delay="2000" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header" style="background-color: black; color: white;">
+                        <div class="toast-body toast__title">
+                            Action Undone
                         </div>
                         <button type="button" class="ml-2 mb-1 close" aria-label="Close" data-dismiss="toast">
                             <span aria-hidden="true" style="color:#fff;">&times;</span>
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <!-- Modal -->
-            <div class="modal fade dialog" id="confirmdialog" tabindex="-1" role="dialog"
-                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body dialog__title">
-                                Are you sure you want to Delete this Task forever ?
-                                <br><br>
-                                <div class="float-right">
-                                    <button type="button" class="btn btn-secondary dialog__btn"
-                                        data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary bg-warning dialog__btn"style="border: none;" id="confirm-del-btn">Delete</button>
+                <!-- Modal -->
+                <div class="modal fade dialog" id="confirmdialog" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body dialog__title">
+                                    Are you sure you want to Delete this Task forever ?
+                                    <br><br>
+                                    <div class="float-right">
+                                        <button type="button" class="btn btn-secondary dialog__btn"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary bg-warning dialog__btn"
+                                            style="border: none;" id="confirm-del-btn">Delete</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 </body>
 <script type="text/javascript" src="js/app.js"></script>
 <script>
