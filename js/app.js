@@ -1,203 +1,188 @@
+var tasks = new Array();
+var deleteTaskTitle,deleteCard;
+var taskTemplate = createHandlebar("task-card");
 
-//date picket restrict
-minDate = new Date().toISOString().substring(0,10);
-$('#due-date').prop('min', minDate);
-//due date check
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth()+1; 
-var yyyy = today.getFullYear();
-if(dd<10) { dd='0'+dd;} 
-if(mm<10) { mm='0'+mm; } 
-today = yyyy+'-'+mm+'-'+dd;
+$(document).ready(function () {
+	loadTask();
+	showPending();
+	$('#pending').on('click', showPending);
+	$('#completed').on('click', showCompleted);
+	$('#bin').on('click', showBinned);
+	$('#new-task-text').on('change', addTask);
+	$('.card-columns').on('click','#del-btn',setBinned);
+	$('.card-columns').on('click','#done-btn',setComplete);
+	$('.card-columns').on('click','#pending-btn',setPending);
+	$('.card-columns').on('click','#final-del-btn',openDeleteDialog);
+	$('#confirmdialog').on('click', '#confirm-del-btn', deleteTask);
+	$('#empty-bin').on('click', emptyBin);
+	$('textarea').on('focusin',() => { $(this).data('val', $(this).val()); });
+	$('textarea').on('change', editTask);
+	setTextarea();
+});
 
-setInterval(checkduedate, 1000);
-function checkduedate() {
-	var duedates = document.getElementsByClassName("due-date");
-	for(var i=0;i<duedates.length;i++){
-		var listitem = duedates[i].parentNode.parentNode;
-		var edittext = listitem.querySelector('input[type=text]');
-		if(duedates[i].value == today){
-			edittext.setAttribute("style","animation: animate 3s linear infinite; ");
-		}
-		else{
-			edittext.setAttribute("style","");
-		}
-	}
+function loadTask() {
+	var temp = JSON.parse(localStorage.getItem("To_do"));
+	for (var i in temp)
+		tasks.push(temp[i]);
 }
-
-//New task list item
-document.getElementById("add-task").onclick = addTask;
-function addTask(){
-
-	var tasktext = document.getElementById("new-task-text").value;
-	if(tasktext.trim() === ""){
-		alert("Enter Task Title");
-	}else{
-	var duedatetext = document.getElementById("due-date").value;
-	var parent=document.getElementById("items");
-	var priority=document.getElementById("priority").value;
-	var row=document.createElement("div");
-	row.className = "row";
-
-		var col1= document.createElement("div");
-		col1.className = "col-xs-4";
-	
-			var checkBox=document.createElement("input");
-			checkBox.type="checkbox";
-			checkBox.id = "checkitem";
-			checkBox.onclick = change;
-
-			var title=document.createElement("input");
-			title.type="text";
-			title.value="  " +tasktext;
-			title.disabled = true;
-
-			var col1_1= document.createElement("div");
-			col1_1.className = "col-xs-2";
-
-			if(duedatetext.trim() != ""){
-			var l1=document.createElement("label");
-			l1.innerHTML="Due on:";
-
-			var duedate=document.createElement("input");
-			duedate.type="date";
-			duedate.value=duedatetext;
-			duedate.disabled = true;
-			duedate.className = "due-date";
-			duedate.onkeydown="return false";
-			duedate.min = minDate;
-			// if(duedatetext.trim() == ""){
-			// 	duedate.setAttribute("style","display:none");
-			// 	l1.innerHTML="Due Date Not Specified";
-			// }
-			col1_1.appendChild(l1);
-			col1_1.appendChild(duedate);
-			}
-
-
-		var col2= document.createElement("div");
-		col2.className = "col-xs-2";
-
-			var editbtn=document.createElement("button");
-			editbtn.innerText="Edit";
-			editbtn.id = "edit-btn";
-			editbtn.onclick = editTask;
-			editbtn.className="btn btn-default btn-primary";
-
-		// var col3= document.createElement("div");
-		// col3.className = "col-sm-1";
-	
-			var delbtn=document.createElement("button");
-			delbtn.innerText="Delete";
-			delbtn.id = "del-btn";
-			delbtn.onclick = deleteTask;
-			delbtn.className="btn btn-default btn-primary";
-
-	col1.appendChild(checkBox);
-	col1.appendChild(title);
-	col1.appendChild(col1_1);
-	col2.appendChild(editbtn);
-	col2.appendChild(delbtn);
-	row.appendChild(col1);
-	row.appendChild(col2);
-	// row.appendChild(col3);
-	parent.insertBefore(row,parent.children[priority-1]);
-	$('.dialog').fadeOut(200);
-	$('.add').removeClass('active');  
-	$('#new-task-text').val("");
-	$('#due-date').val("");
-	$('#due-date').prop("type","text");
-	}
+function addTask() {
+	$("#empty-bg").css("display", "none");
+	$(".card-columns").prepend(taskTemplate({ task_text: $("#new-task-text").val(), status: "Pending" }));
+	tasks.push({ title: $("#new-task-text").val(), status: "Pending" });
+	localStorage.setItem("To_do", JSON.stringify(tasks));
+	setTextarea();
+	$("#new-task-text").val("");
 }
-
-//Edit an existing task.
 function editTask() {
-	console.log("Edit Task");
-	var listitem = this.parentNode.parentNode;
-	var checkBox = listitem.querySelector('input[type=checkbox]')
-	var edittext = listitem.querySelector('input[type=text]');
-	var duedate = listitem.querySelector('input[type=date]');
-	var editTask = listitem.querySelector('button');
-
-	if (editTask.innerText === "Done") {
-		checkBox.disabled = false;
-		edittext.disabled = true;
-		if(duedate)
-		duedate.disabled = true;
-		editTask.innerText = "Edit";
+	console.log("sds");
+	var newTitle = $(this).val();
+	var oldTitle = $(this).data('val');
+	changeTitle(oldTitle, newTitle);
+	localStorage.setItem("To_do", JSON.stringify(tasks));
+}
+function deleteTask() {
+	console.log(deleteTaskTitle);
+	for (var i = 0; i < tasks.length; i++) {
+		if (tasks[i].title == deleteTaskTitle)
+			tasks = tasks.filter(obj => {
+				return obj != tasks[i];
+			});
 	}
-	else {
-		checkBox.disabled = true;
-		edittext.disabled = false;
-		if(duedate)
-		duedate.disabled = false;
-		editTask.innerText = "Done";
-		edittext.focus();
+	localStorage.setItem("To_do", JSON.stringify(tasks));
+	deleteCard.fadeOut(500, cardRemove);
+	$('#confirmdialog').modal('hide');
+}
+function openDeleteDialog(){
+	deleteTaskTitle = $(this).parent().find("textarea").val();
+	deleteCard = $(this).parent().parent();
+	$('#confirmdialog').modal('show');
+}
+function setBinned() {
+	console.log($(this));
+	var card = $(this).parent().parent();
+	var title = $(this).parent().find("textarea").val();
+	changeStatus(title, "Binned");
+	localStorage.setItem("To_do", JSON.stringify(tasks));
+	card.fadeOut(500, cardRemove);
+	$(".toast").toast("show");
+}
+function setComplete() {
+	var card = $(this).parent().parent();
+	var title = $(this).parent().find("textarea").val();
+	changeStatus(title, "Completed");
+	localStorage.setItem("To_do", JSON.stringify(tasks));
+	card.fadeOut(500, cardRemove);
+}
+function setPending() {
+	var card = $(this).parent().parent();
+	var title = $(this).parent().find("textarea").val();
+	changeStatus(title, "Pending");
+	localStorage.setItem("To_do", JSON.stringify(tasks));
+	card.fadeOut(500, cardRemove);
+}
+function appendTask(task_list, status) {
+	$("#empty-bg").css("display", "none");
+	$(".card-columns").empty();
+	var container = $(".card-columns");
+	for (var i = task_list.length - 1; i > -1; i--)
+		container.append(taskTemplate({ task_text: task_list[i].title, status: status }));
+	container.append('</div>');
+}
+function emptyTaskList() {
+	$("#empty-bg").css("display", "unset");
+	$(".card-columns").empty();
+}
+function showPending() {
+	$("#new-task-text").css("display", "block");
+	$("#title-pending").css("display", "block");
+	$("#empty-bin").css("display", "none");
+	$("#title-bin").css("display", "none");
+	$("#title-complete").css("display", "none");
+	var pendingTasks = tasks.filter(obj => {
+		return obj.status === "Pending";
+	});
+	if (pendingTasks.length != 0) {
+		appendTask(pendingTasks, "Pending");
+	} else {
+		emptyTaskList();
+	}
+	setTextarea();
+}
+function showBinned() {
+	$("#new-task-text").css("display", "none");
+	$("#empty-bin").css("display", "unset");
+	$("#title-pending").css("display", "none");
+	$("#title-bin").css("display", "block");
+	$("#title-complete").css("display", "none");
+	var binnedTasks = tasks.filter(obj => {
+		return obj.status === "Binned";
+	});
+	if (binnedTasks.length != 0) {
+		appendTask(binnedTasks, "Binned");
+	} else {
+		emptyTaskList();
+	}
+	setTextarea();
+}
+function showCompleted() {
+	$("#new-task-text").css("display", "none");
+	$("#title-pending").css("display", "none");
+	$("#empty-bin").css("display", "none");
+	$("#title-bin").css("display", "none");
+	$("#title-complete").css("display", "block");
+	var completedTasks = tasks.filter(obj => {
+		return obj.status === "Completed";
+	});
+	if (completedTasks.length != 0) {
+		appendTask(completedTasks, "Completed");
+	} else {
+		emptyTaskList();
+	}
+	setTextarea();
+}
+function setTextarea() {
+	$('textarea').each(function () {
+		this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+	}).on('input', function () {
+		this.style.height = 'auto';
+		this.style.height = (this.scrollHeight) + 'px';
+	});
+}
+function cardRemove() {
+	var parent = $(this).parent();
+	this.remove();
+	if (!parent.children().length > 0) {
+		$("#empty-bg").css("display", "block");
 	}
 }
-
-//Delete task.
-function deleteTask(){
-	console.log("Delete Task...");
-	listItem=this.parentNode.parentNode;
-	var parent=listItem.parentNode;
-	parent.removeChild(listItem);
-	
+function changeStatus(task_title, task_status) {
+	for (var i = 0; i < tasks.length; i++) {
+		if (tasks[i].title == task_title) {
+			tasks[i].status = task_status;
+			break;
+		}
+	}
 }
-
-function movetocomplete(titleString){
-	var parent=document.getElementById("completed-items");
-	
-	var row=document.createElement("div");
-	row.className = "row";
-
-		var col1= document.createElement("div");
-		col1.className = "col-sm-5";
-
-			var title = document.createElement("input");
-			title.type="text";
-			title.value ="  " +titleString;
-			title.disabled = true;
-
-		var col2= document.createElement("div");
-		col2.className = "col-sm-1";
-
-			var delbtn=document.createElement("button");
-			delbtn.innerText="Delete";
-			delbtn.id = "del-btn";
-			delbtn.onclick = deleteTask;
-			delbtn.className="btn btn-default btn-primary btn-xs";
-
-	col1.appendChild(title);
-	col2.appendChild(delbtn);
-	row.appendChild(col1);
-	row.appendChild(col2);
-	parent.appendChild(row);
+function changeTitle(old_title, new_title) {
+	for (var i = 0; i < tasks.length; i++) {
+		if (tasks[i].title == old_title) {
+			tasks[i].title = new_title;
+			break;
+		}
+	}
 }
-
-function change() {
-	console.log("change");
-	var listItem = this.parentNode;
-	var edittext = listItem.querySelector('input[type=text]');
-    if(this.checked){
-		movetocomplete(edittext.value);
-		var parent=listItem.parentNode.parentNode;
-		parent.removeChild(listItem.parentNode);
-    } 
+function emptyBin() {
+	tasks = tasks.filter(obj => {
+		return obj.status !== "Binned";
+	});
+	localStorage.setItem("To_do", JSON.stringify(tasks));
+	showBinned();
 }
-
-
-$(document).ready( function() {
-  
-	$('.add').click(function(e){
-	  e.stopPropagation();
-	 if ($(this).hasClass('active')){
-	   $('.dialog').fadeOut(200);
-	   $(this).removeClass('active');
-	 } else {
-	   $('.dialog').delay(300).fadeIn(200);
-	   $(this).addClass('active');
-	 }
-   });
-   });
+function createHandlebar(containerId) {
+	var template = document.getElementById(containerId).innerHTML;
+	Handlebars.registerHelper('ifeq', (a, b, options) => {
+		if (a == b) { return options.fn(this); }
+		return options.inverse(this);
+	});
+	return Handlebars.compile(template);
+}

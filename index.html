@@ -4,87 +4,134 @@
 <head>
     <title>To do List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="style.css" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="responsive.css" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="css/responsive.css" type="text/css" charset="utf-8">
     <link href='https://fonts.googleapis.com/css?family=Lexend+Mega&family=Yusei+Magic&display=swap"' rel='stylesheet'
         type='text/css'>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&family=Roboto+Mono:wght@200&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <script src="jquery.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <script src="js/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.4/handlebars.min.js"></script>
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-warning">
+        <a href="#" class="navbar-brand">To-do</a>
+        <button type="button" class="navbar-toggler bg-warning" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+                <a href="#" class="nav-item nav-link active">Home</a>
+                <a href="#" class="nav-item nav-link">Bin</a>
+                <!-- <a href="#" class="nav-item nav-link">Messages</a>
+                <a href="#" class="nav-item nav-link disabled" tabindex="-1">Reports</a> -->
+            </div>
+            <!-- <div class="navbar-nav ml-auto">
+                <a href="#" class="nav-item nav-link">Login</a>
+            </div> -->
+        </div>
+    </nav>
     <div class="container">
         <div class="row justify-content-center align-items-center">
-            <div class="col-md-6 content">
-                <button class="btn btn-default btn-primary add"><i class="fa fa-plus"></i> Add
-                    New Task</button>
-                <div class="dialog" style="display:none">
-                    <div class="title">Add Task</div>
-                    <div class="dialog-content">
-                        <input id="new-task-text" type="text" placeholder="Title" />
-                        <input id="priority" type="text" placeholder="Set Priority (Optional)"
-                            onkeypress="return onlynumber(event)" />
-                        <input id="due-date" type="text" onfocus="(this.type='date')" placeholder="Due Date (Optional):"
-                            onkeydown="return false" />
-                        <button class="btn btn-default btn-primary" id="add-task">Add</button>
+            <div class="col-md-8 content">
+                <div class="row">
+                    <div class="input-group">
+                        <input class="form-control py-2 border" type="text" placeholder="What you want to do?" id="new-task-text" class="new_task_text" />
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-default empty__bin" id="empty-bin">Empty Bin  <i class="fa fa-trash" aria-hidden="true"></i></button>
+                <div class="dropdown float-right">
+                    <button class="btn btn-secondary dropdown-toggle bg-warning" style="border:none" type="button"
+                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Filters
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <button class="dropdown-item" id="pending">Pending</button>
+                        <button class="dropdown-item" id="completed">Completed</button>
+                        <button class="dropdown-item" id="bin">Bin</button>
+                                    <!-- <a class="dropdown-item" href="#">Important</a> -->
                     </div>
                 </div>
                 <br>
                 <br>
-                <br>
-                <div class="header">
-                    <h3>To-do List</h3>
+                <div id="empty-bg">
+                    <div class="page_bg_img"></div>
+                    <h3 class="text-center page_bg_text" id="title-bin" style="display: none;">Tasks in Bin remain Here</h3>
+                    <h3 class="text-center page_bg_text" id="title-complete" style="display: none;">Completed Tasks remain Here</h3>
+                    <h3 class="text-center page_bg_text" id="title-pending" style="display: none;">Tasks You Add Appear Here</h3>
                 </div>
-                <hr>
-                <div id="items">
-                    <!-- <div class="row">
-                        <div class="col-xs-4">
-                            <input type="checkbox" id = "checkitem" />
-                            <input type="text" value=" Task 1" disabled />
-                            <div class="col-xs-2">
-                            <label>Due on:</label>
-                            <input type="date" disabled/>
+                <div class="container cards">
+                    <div class="card-columns">
+                        <script id="task-card" type="text/x-handlebars-template">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <textarea class="form-control card-text card__textarea">{{task_text}}</textarea>
+                                    {{#ifeq status "Pending"}}
+                                    <button class="btn btn-default card__done__btn" id="done-btn" data-placement="right" title="Complete Task"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default card__del__btn" id="del-btn" data-placement="right" title="Delete"><i class="fa fa-trash-o fa-xs" aria-hidden="true"></i></button>
+                                    {{/ifeq}}
+                                    {{#ifeq status "Binned"}}
+                                    <button class="btn btn-default card__pending__btn" id="pending-btn" data-placement="right" title="Send to Pending"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default card__del__btn" id="final-del-btn" data-placement="right" title="Delete Forever"><i class="fa fa-trash-o fa-xs" aria-hidden="true" ></i></button>
+                                    {{/ifeq}}
+                                    {{#ifeq status "Completed"}} 
+                                    <button class="btn btn-default card__pending__btn" id="pending-btn" data-placement="right" title="Send to Pending"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default card__del__btn" id="del-btn" data-placement="right" title="Delete"><i class="fa fa-trash-o fa-xs" aria-hidden="true"></i></button>
+                                    {{/ifeq}}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-xs-2">
-                            <button class="btn btn-default btn-primary" id="edit-btn">Edit</button>
-                            <button class="btn btn-default btn-primary" id="del-btn">Delete</button>
-                        </div>
-                    </div> -->
+                        </script>
+                    </div>
                 </div>
                 <br>
-                <!-- <div class="row">
-                    <button class="btn btn-default btn-primary" id="add-task-btn"><i class="fa fa-plus"></i> Add
-                        New Task</button>
-                    <dialog id="addtaskdialog">
-                        <input type="text" id="new-task-text" />
-                        <button class="btn btn-default btn-primary" id="add-task">Add</button>
-                        <button class="btn btn-default btn-primary" id="hide">Close</button>
-                    </dialog>
-                </div>
-                <br>
-                <br> -->
-                <h3>Completed List</h3>
-                <hr>
-                <div id="completed-items">
-                    <!-- <div class="row">
-                <div class="col-sm-5">
-                    <label>Task 1</label>
-                </div>
-                <div class="col-sm-1">
-                    <button class="btn btn-default btn-primary" id="del-btn">Delete</button>
-                </div>
-            </div> -->
+                <!--toast-->
+
+                <div class="toast" data-delay="2000" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header" style="background-color: black; color: white;">
+                        <div class="toast-body toast__title">
+                            Task is Binned
+                        </div>
+                        <button type="button" class="ml-2 mb-1 close" aria-label="Close" data-dismiss="toast">
+                            <span aria-hidden="true" style="color:#fff;">&times;</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Modal -->
+            <div class="modal fade dialog" id="confirmdialog" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body dialog__title">
+                                Are you sure you want to Delete this Task forever ?
+                                <br><br>
+                                <div class="float-right">
+                                    <button type="button" class="btn btn-secondary dialog__btn"
+                                        data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary bg-warning dialog__btn"style="border: none;" id="confirm-del-btn">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-    </div>
 </body>
-<script type="text/javascript" src="app.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
 <script>
     function onlynumber(evt) {
         var ASCIICode = (evt.which) ? evt.which : evt.keyCode;
@@ -92,6 +139,6 @@
             return false;
         return true;
     }
-
 </script>
+
 </html>

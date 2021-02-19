@@ -3,9 +3,7 @@
   font-style: italic;
   font-weight: bold;
 }
-body{
-  /* background-color: #971201f3 !important; */
-}
+
 @media (min-height: 650px){
   .content{
     margin-top: 50px;
@@ -18,98 +16,73 @@ body{
     padding: 10px;
   }
 }
+.card__done__btn,.card__pending__btn{
+  position: absolute;
+  top:    0;
+  right:  0;
+  background-color:transparent  !important;
+  padding: 0px 3px 0px 0px !important;
+  font-size: 1rem !important;
+} 
+.card__del__btn{
+  position: absolute;
+  right:    0;
+  bottom:   0;
+  background-color:transparent  !important;
+  padding: 0px 3px 0px 0px !important;
+  font-size: 1rem !important;
+}
 .content{
   color:rgb(14, 13, 13);
+  height: 100%;
   /* background-color: #ece496 !important; */
 }
-hr{
-  background-color: #000000;
+.page_bg_img{
+  background-image: url(../img/note2.PNG);
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 100%;
+  height: 300px;
+  background-position: center;
 }
-button{
-  background-color: #000000 !important;
-  margin-left: 5px !important;
-  margin-right: 5px !important;
-  border: 0px !important;
+.page_bg_text{
+  color: rgb(179, 179, 179);
+  font-style: normal;
 }
-#add-task-btn {
-  float: right;
-}
-input[type="text"]{
+.card .card__textarea,.card .card__textarea:read-only{
   background-color:transparent;
+  color: #000;
+  letter-spacing: .00625em;
+  font-family: Roboto,Arial,sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  font-style: normal;
+  border: none !important;
+  outline: none !important;
+  overflow:hidden;
+  resize: none;
+}
+.card .card__textarea:focus{
+  border: none !important;
+  outline: none !important;
+  box-shadow: none;
+}
+.card{
+  box-shadow: 1px 1px 1px rgba(33,33,33,.7);
+}
+.card-body{
+  padding: 0px  !important;
+}
+.new_task_text{
+  background:transparent;
+  color:transparent;
   border: 0px;
   padding-right: 15px;
   color: #000000;
+  margin: 5px;
+  box-shadow: 1px 1px 1px 1px rgb(216, 215, 215);
 }
-input[type="date"]{
-  background-color:transparent;
-  color: #8d0404;
-  border: 0px;
-  font-size: xx-small;
-}
-label{
-  font-size:  xx-small;
-}
-#items *{
-    margin: 5px 0;
-}
-#completed-items *{
-  margin: 5px 0;
-}
-#add-task{
-  margin-top: 10px;
-}
-#addtaskdialog{
-  width:50%;
-  color:#000000;
-  border:1px;
-  margin-left: 120px;
-} 
-
-nav {
-  height: auto;
-  background: #000000;
-}
-
-.dialog {
-  background: #fff;
-  display: inline-block;
-  width: auto; 
-  border:2px solid black;
-}
-
-.dialog .title {
-  color: #000;
-  font-weight: bold;
-  text-align: center;
-  margin-left: 0;
-  margin-right: 0;
-  margin-bottom: 4px;
-  margin-top: 8px;
-  padding: 8px 16px;
-  background: #fff;
-  font-size: 16px;
-  line-height:2em;
-  border-top:1px solid black;
-  border-bottom: 1px solid black;
-}
-.dialog .title:first-child {
-  margin-top: -4px;
-}
-.dialog-content{
-  padding: 10px;
-}
-#new-task-text,#due-date,#priority{
-  color: #000000 !important;
-  border: 0;
-  outline: 0;
-  resize: none;
-  margin-top: 10px;
-  width:100%;
-  background-color: #fff;
-  border-bottom: 1px dotted black;
-  font-size: medium;
-}
-
 @keyframes animate { 
   0% { 
       opacity: 0.4; 
@@ -123,4 +96,54 @@ nav {
       opacity: 0.4; 
   } 
 } 
-
+.dialog__title{
+  letter-spacing: .01428571em;
+  font-family: Roboto,Arial,sans-serif;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  color: #3c4043;
+  word-wrap: break-word;
+  font-size: 15px;                              
+}
+.dialog__btn{
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: rgba(0,0,0,0.87);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: .01785714em;
+  font-family: 'Google Sans',Roboto,Arial,sans-serif;
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  height: 36px;
+  padding: 8px 24px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.toast{
+  position: fixed;
+  bottom: 30px;
+}
+.toast__title{
+  letter-spacing: .01428571em;
+  font-family: 'Roboto',arial,sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  font-style: normal;
+  color: #fff;
+  line-height: 1.6;
+  word-break: break-word;
+}
+.empty__bin{
+  background-color:white !important;
+  color:#1A73E8 !important; 
+  display:none; 
+  font-style: normal;
+  letter-spacing: .02085714em;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
