@@ -1,5 +1,5 @@
 var tasks = new Array();
-var deleteTaskTitle,deleteCard;
+var deleteTaskTitle,deleteCard,editTaskTitle;
 var taskTemplate = createHandlebar("task-card");
 
 $(document).ready(function () {
@@ -15,31 +15,36 @@ $(document).ready(function () {
 	$('.card-columns').on('click','#final-del-btn',openDeleteDialog);
 	$('#confirmdialog').on('click', '#confirm-del-btn', deleteTask);
 	$('#empty-bin').on('click', emptyBin);
-	$('textarea').on('focusin',() => { $(this).data('val', $(this).val()); });
-	$('textarea').on('change', editTask);
+	$('.card-columns').on('focusin','#card-textarea',(event) => { 
+		editTaskTitle = $(event.target).val(); 
+	});
+	$('.card-columns').on('focusout','#card-textarea', editTask);
 	setTextarea();
 });
 
+/** Loads tasks from Local storage to Array */
 function loadTask() {
 	var temp = JSON.parse(localStorage.getItem("To_do"));
 	for (var i in temp)
 		tasks.push(temp[i]);
 }
+/** Add new task with title defined in textarea */
 function addTask() {
 	$("#empty-bg").css("display", "none");
-	$(".card-columns").prepend(taskTemplate({ task_text: $("#new-task-text").val(), status: "Pending" }));
+	$(".card-columns").prepend(taskTemplate({ task_text: $('#new-task-text').val(), status: "Pending"}));
 	tasks.push({ title: $("#new-task-text").val(), status: "Pending" });
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	setTextarea();
 	$("#new-task-text").val("");
 }
+/** Edit given task when textarea lost focus   */
 function editTask() {
-	console.log("sds");
 	var newTitle = $(this).val();
-	var oldTitle = $(this).data('val');
-	changeTitle(oldTitle, newTitle);
+	console.log(newTitle);
+	changeTitle(editTaskTitle, newTitle);
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 }
+/** Delete task Permenantly from local storage */
 function deleteTask() {
 	console.log(deleteTaskTitle);
 	for (var i = 0; i < tasks.length; i++) {
@@ -52,13 +57,14 @@ function deleteTask() {
 	deleteCard.fadeOut(500, cardRemove);
 	$('#confirmdialog').modal('hide');
 }
+/** Opens confirm Delete dialog*/
 function openDeleteDialog(){
 	deleteTaskTitle = $(this).parent().find("textarea").val();
 	deleteCard = $(this).parent().parent();
 	$('#confirmdialog').modal('show');
 }
+/** Change status of current task(from where this function is called) to Binned*/
 function setBinned() {
-	console.log($(this));
 	var card = $(this).parent().parent();
 	var title = $(this).parent().find("textarea").val();
 	changeStatus(title, "Binned");
@@ -66,6 +72,7 @@ function setBinned() {
 	card.fadeOut(500, cardRemove);
 	$(".toast").toast("show");
 }
+/** Change status of current task(from where this function is called) to Complete*/
 function setComplete() {
 	var card = $(this).parent().parent();
 	var title = $(this).parent().find("textarea").val();
@@ -73,6 +80,7 @@ function setComplete() {
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	card.fadeOut(500, cardRemove);
 }
+/** Change status of current task(from where this function is called) to Pending*/
 function setPending() {
 	var card = $(this).parent().parent();
 	var title = $(this).parent().find("textarea").val();
@@ -80,13 +88,25 @@ function setPending() {
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	card.fadeOut(500, cardRemove);
 }
-function appendTask(task_list, status) {
+/** 
+ * Loads tasks of specific status
+ * @param {string} status - status of task
+*/
+function appendTask(status) {
 	$("#empty-bg").css("display", "none");
 	$(".card-columns").empty();
 	var container = $(".card-columns");
-	for (var i = task_list.length - 1; i > -1; i--)
-		container.append(taskTemplate({ task_text: task_list[i].title, status: status }));
-	container.append('</div>');
+	var task_list = tasks.filter(obj => {
+		return obj.status === status;
+	});
+	if (task_list.length != 0) {
+		for (var i = task_list.length - 1; i > -1; i--)
+			container.append(taskTemplate({ task_text: task_list[i].title, status: status }));
+		container.append('</div>');
+	} else {
+		emptyTaskList();
+	}
+	
 }
 function emptyTaskList() {
 	$("#empty-bg").css("display", "unset");
@@ -98,14 +118,7 @@ function showPending() {
 	$("#empty-bin").css("display", "none");
 	$("#title-bin").css("display", "none");
 	$("#title-complete").css("display", "none");
-	var pendingTasks = tasks.filter(obj => {
-		return obj.status === "Pending";
-	});
-	if (pendingTasks.length != 0) {
-		appendTask(pendingTasks, "Pending");
-	} else {
-		emptyTaskList();
-	}
+	appendTask("Pending");
 	setTextarea();
 }
 function showBinned() {
@@ -114,14 +127,7 @@ function showBinned() {
 	$("#title-pending").css("display", "none");
 	$("#title-bin").css("display", "block");
 	$("#title-complete").css("display", "none");
-	var binnedTasks = tasks.filter(obj => {
-		return obj.status === "Binned";
-	});
-	if (binnedTasks.length != 0) {
-		appendTask(binnedTasks, "Binned");
-	} else {
-		emptyTaskList();
-	}
+	appendTask("Binned");
 	setTextarea();
 }
 function showCompleted() {
@@ -130,14 +136,7 @@ function showCompleted() {
 	$("#empty-bin").css("display", "none");
 	$("#title-bin").css("display", "none");
 	$("#title-complete").css("display", "block");
-	var completedTasks = tasks.filter(obj => {
-		return obj.status === "Completed";
-	});
-	if (completedTasks.length != 0) {
-		appendTask(completedTasks, "Completed");
-	} else {
-		emptyTaskList();
-	}
+	appendTask("Completed");
 	setTextarea();
 }
 function setTextarea() {
@@ -163,6 +162,11 @@ function changeStatus(task_title, task_status) {
 		}
 	}
 }
+/**
+ * Changes title of task
+ * @param {string} old_title - The old title of the Task.
+ * @param {string} new_title - The new title of the Task.
+ */
 function changeTitle(old_title, new_title) {
 	for (var i = 0; i < tasks.length; i++) {
 		if (tasks[i].title == old_title) {
@@ -178,6 +182,10 @@ function emptyBin() {
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	showBinned();
 }
+/**
+ * Creates Handlebar 
+ * @param {string} containerId - Id of Html container template.
+ */
 function createHandlebar(containerId) {
 	var template = document.getElementById(containerId).innerHTML;
 	Handlebars.registerHelper('ifeq', (a, b, options) => {
