@@ -35,8 +35,8 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="index.html" class="nav-item nav-link active" id="home-menu">Home</a>
-                <a href="completed.html" class="nav-item nav-link" id="completed-menu">Completed</a>
+                <a href="index.html" class="nav-item nav-link" id="home-menu">Home</a>
+                <a href="completed.html" class="nav-item nav-link active" id="completed-menu">Completed</a>
                 <a href="bin.html" class="nav-item nav-link" id="bin-menu">Bin</a>
                 <!-- <a href="#" class="nav-item nav-link">Messages</a>
                 <a href="#" class="nav-item nav-link disabled" tabindex="-1">Reports</a> -->
@@ -86,14 +86,14 @@
                         <script id="task-card" type="text/x-handlebars-template">
                             <div class="card">
                                 <div class="card-body text-center">
-                                    <textarea class="form-control card-text card__textarea" id="card-textarea" style="{{color}}">{{task_text}}</textarea>
+                                    <textarea class="form-control card-text card__textarea" id="card-textarea">{{task_text}}</textarea>
                                     {{#ifeq status "Pending"}}
                                     <button class="btn btn-default card__done__btn" id="done-btn" data-placement="right" title="Complete Task"><i class="fa fa-check" aria-hidden="true"></i></button>
                                     <!-- <div id="colorpicker" class="input-group colorpicker-component colorpicker"> 
                                         <input type="text" id="colorpicker-text" value="#00AABB" class="form-control" hidden/> 
                                         <span id="colorpicker-icon" class="input-group-addon colorpicker__icon"><i></i></span>
                                     </div> -->
-                                    <input type="color" class="colorpicker__icon" id="colorpicker-icon" />
+                                    <input type="color" class="colorpicker__icon" id="colorpicker-icon"/>
                                     <button class="btn btn-default card__del__btn" id="del-btn" data-placement="right" title="Delete"><i class="fa fa-trash-o fa-xs" aria-hidden="true"></i></button>
                                     {{/ifeq}}
                                     {{#ifeq status "Binned"}}

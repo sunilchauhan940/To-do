@@ -76,7 +76,6 @@
 }
 .new_task_text{
   background:transparent;
-  color:transparent;
   border: 0px;
   padding-right: 15px;
   color: #000000;
@@ -195,6 +194,10 @@
   padding: 0px 3px 0px 0px !important;
   font-size: .4rem !important;
   border: none;
+}
+.dark-mode {
+  background-color: black;
+  color: white;
 }
 @keyframes countdown {
   from {

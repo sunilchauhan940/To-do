@@ -14,7 +14,14 @@ var taskTemplate = createHandlebar("task-card");
 /** Loads Web page and Initialize All Event Listeners */
 $(document).ready(function () {
 	loadTask();
-	showPending();
+	if($('#home-menu').hasClass("active")){
+		showPending();
+	}else if($('#bin-menu').hasClass("active")){
+		showBinned();
+	}else{
+		showCompleted();
+	}
+
 	$('.card-columns').on('input','#colorpicker-icon',(ev) => {
 		changecolor($(ev.target).parent().find("textarea"),$(ev.target).val())	
     });
@@ -47,7 +54,7 @@ function loadTask() {
 function addTask() {
 	$("#empty-bg").css("display", "none");
 	$(".card-columns").prepend(taskTemplate({ task_text: $('#new-task-text').val(), status: "Pending"}));
-	tasks.push({ title: $("#new-task-text").val(), status: "Pending" });
+	tasks.push({ title: $("#new-task-text").val(), status: "Pending",color:"#000" });
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	setTextarea();
 	$("#new-task-text").val("");
@@ -56,14 +63,12 @@ function addTask() {
 /** Edit given task when textarea lost focus   */
 function editTask() {
 	var newTitle = $(this).val();
-	console.log(newTitle);
 	changeTitle(editTaskTitle, newTitle);
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 }
 
 /** Delete task Permenantly from local storage */
 function deleteTask() {
-	console.log(deleteTaskTitle);
 	for (var i = 0; i < tasks.length; i++) {
 		if (tasks[i].title == deleteTaskTitle)
 			tasks = tasks.filter(obj => {
@@ -166,6 +171,7 @@ function showBinned() {
 	$("#title-complete").css("display", "none");
 	appendTask("Binned");
 	setTextarea();
+	setAllTextareaRealonly();
 }
 
 /** Shows Completed tasks on page. Used in Loading Completed Task Page */
@@ -177,15 +183,32 @@ function showCompleted() {
 	$("#title-complete").css("display", "block");
 	appendTask("Completed");
 	setTextarea();
+	setAllTextareaRealonly();
 }
 
 /** Set static textarea to expandable textarea  */
 function setTextarea() {
 	$('textarea').each(function () {
-		this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+		taskTitle = this.value;
+		taskColorPicker = $(this).parent().find('#colorpicker-icon');
+		for (var i = 0; i < tasks.length; i++) {
+			if (tasks[i].title == taskTitle) {
+				this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden; color:' + tasks[i].color +';');
+				taskColorPicker.val(tasks[i].color);
+				break;
+			}
+		}
+		
 	}).on('input', function () {
 		this.style.height = 'auto';
 		this.style.height = (this.scrollHeight) + 'px';
+	});
+}
+
+/** Make All textarea Readonly  */
+function setAllTextareaRealonly() {
+	$('textarea').each(function () {
+		$(this).prop("readonly",true);
 	});
 }
 
@@ -266,4 +289,13 @@ function setCountdownTimer(){
 */
 function changecolor(textarea,color){
 	textarea.css("color",color);
+	task_title = textarea.val();
+	for (var i = 0; i < tasks.length; i++) {
+		if (tasks[i].title == task_title) {
+			tasks[i].color = color;
+			break;
+		}
+	}
+	localStorage.setItem("To_do", JSON.stringify(tasks));
 }
+
