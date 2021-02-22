@@ -15,6 +15,9 @@ var taskTemplate = createHandlebar("task-card");
 $(document).ready(function () {
 	loadTask();
 	showPending();
+	$('.card-columns').on('input','#colorpicker-icon',(ev) => {
+		changecolor($(ev.target).parent().find("textarea"),$(ev.target).val())	
+    });
 	$('#pending').on('click', showPending);
 	$('#completed').on('click', showCompleted);
 	$('#bin').on('click', showBinned);
@@ -94,6 +97,7 @@ function setBinned() {
 	changeStatus(undoTaskTitle, "Binned");
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	card.fadeOut(500, cardRemove);
+	setCountdownTimer();
 	$("#toast-bin").toast("show");
 }
 
@@ -244,11 +248,22 @@ function createHandlebar(containerId) {
 	return Handlebars.compile(template);
 }
 
-/** Code for countdown undo timer  */
-var countdownNumberEl = document.getElementById('countdown-number');
-var countdown = 5;
-countdownNumberEl.textContent = countdown;
-setInterval(function() {
-  countdown = --countdown <= 0 ? 5 : countdown;
-  countdownNumberEl.textContent = countdown;
-}, 1000);
+/** Code for undo timer  */
+function setCountdownTimer(){
+	var countdownNumberEl = document.getElementById('countdown-number');
+	var countdown = 5;
+	countdownNumberEl.textContent = countdown;
+	setInterval(() => {
+	  countdown = --countdown <= 0 ? 5 : countdown;
+	  countdownNumberEl.textContent = countdown;
+	}, 1200);
+}
+
+/** 
+ * Change color of task 
+ * @param {object} textarea - Object that references textarea.
+ * @param {string} color - hex code of color.
+*/
+function changecolor(textarea,color){
+	textarea.css("color",color);
+}

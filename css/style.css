@@ -156,8 +156,7 @@
   line-height: 1.25rem;
 }
 
-
-#countdown {
+.toast__undo__countdown {
   position: relative;
   margin-left: 10px;
   height: 40px;
@@ -165,13 +164,13 @@
   text-align: center;
 }
 
-#countdown-number {
+.toast__undo__countdown_number {
   color: white;
   display: inline-block;
   line-height: 40px;
 }
 
-svg {
+.toast__loading__svg {
   position: absolute;
   top: 0;
   right: 0;
@@ -179,9 +178,8 @@ svg {
   height: 40px;
   transform: rotateY(-180deg) rotateZ(-90deg);
 }
-
-svg circle {
-  stroke-dasharray: 113px;
+.toast__loading__circle {
+  stroke-dasharray: 10px;
   stroke-dashoffset: 0px;
   stroke-linecap: round;
   stroke-width: 2px;
@@ -189,12 +187,20 @@ svg circle {
   fill: none;
   animation: countdown 5s linear infinite forwards;
 }
-
+.colorpicker__icon{
+  position: absolute;
+  right:    30px;
+  bottom:  1px;
+  background-color:transparent  !important;
+  padding: 0px 3px 0px 0px !important;
+  font-size: .4rem !important;
+  border: none;
+}
 @keyframes countdown {
   from {
     stroke-dashoffset: 0px;
   }
   to {
-    stroke-dashoffset: 113px;
+    stroke-dashoffset: 66px;
   }
 }
