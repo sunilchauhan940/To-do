@@ -10,7 +10,10 @@ var editTaskTitle;
 var undoTaskTitle;
 /** Handlebar Template for Card that Represents Task */
 var taskTemplate = createHandlebar("task-card");
+/** Handlebar Template for Card that Represents Image Task */
 var imgtaskTemplate = createHandlebar("image-card");
+
+
 /** Loads Web page and Initialize All Event Listeners */
 $(document).ready(function () {
 	loadTask();
@@ -21,7 +24,11 @@ $(document).ready(function () {
 	}else{
 		showCompleted();
 	}
-
+	$(document).keydown(function(e){
+		if( e.which === 90 && e.ctrlKey ){
+			undoTask();
+		}       
+  	}); 
 	$('#file-input').on('change',uploadimage)
 	$('.card-columns').on('input','#colorpicker-icon',(ev) => {
 		changecolor($(ev.target).parent().find("textarea"),$(ev.target).val())	
@@ -40,7 +47,8 @@ $(document).ready(function () {
 	$('.card-columns').on('click','#final-del-btn',openDeleteDialog);
 	$('.card-columns').on('click','#img-final-del-btn',openDeleteDialog);
 	$('#confirmdialog').on('click', '#confirm-del-btn', deleteTask);
-	$('#empty-bin').on('click', emptyBin);
+	$('#bindialog').on('click', '#empty-bin-btn', emptyBin);
+	$('#empty-bin').on('click', ()=>{$('#bindialog').modal('show');});
 	$('.card-columns').on('focusin','#card-textarea',(event) => { 
 		editTaskTitle = $(event.target).val(); 
 	});
@@ -187,6 +195,7 @@ function emptyTaskList() {
 /** Shows Pending tasks on page. Used in Loading Pending Task Page */
 function showPending() {
 	$("#new-task-text").css("display", "block");
+	$("#image-upload").css("display", "block");
 	$("#title-pending").css("display", "block");
 	$("#empty-bin").css("display", "none");
 	$("#title-bin").css("display", "none");
@@ -262,6 +271,7 @@ function cardRemove() {
  * @param {string} task_status - Updated Status of task. 
  */
 function changeStatus(task_title, task_status) {
+	console.log("changeStatus");
 	for (var i = 0; i < tasks.length; i++) {
 		if (tasks[i].title == task_title) {
 			tasks[i].status = task_status;
@@ -290,6 +300,7 @@ function emptyBin() {
 		return obj.status !== "Binned";
 	});
 	localStorage.setItem("To_do", JSON.stringify(tasks));
+	$('#bindialog').modal('hide');
 	showBinned();
 }
 

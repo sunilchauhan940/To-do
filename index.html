@@ -60,7 +60,9 @@
                             </label>
                             <input id="file-input" type="file" accept="image/x-png,image/gif,image/jpeg" style="cursor: pointer;  display: none" />
                         </div>
+            
                     </div>
+                  
                 </div>
                 <br>
                 <button class="btn btn-default empty__bin" id="empty-bin">Empty Bin <i class="fa fa-trash"   aria-hidden="true"></i></button>
@@ -183,6 +185,25 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal fade dialog" id="bindialog" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body dialog__title">
+                                Empty bin? All notes in Recycle Bin will be permanently deleted.
+                                <br><br>
+                                <div class="float-right">
+                                    <button type="button" class="btn btn-secondary dialog__btn"
+                                        data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary bg-warning dialog__btn"
+                                        style="border: none;" id="empty-bin-btn">Empty Bin</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
 </body>
 <script type="text/javascript" src="js/app.js"></script>
