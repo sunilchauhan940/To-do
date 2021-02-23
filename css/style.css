@@ -69,7 +69,7 @@
   box-shadow: none;
 }
 .card{
-  box-shadow: 1px 1px 1px rgba(33,33,33,.7);
+  box-shadow: 1px 1px 1px rgba(204, 202, 202, 0.7);
 }
 .card-body{
   padding: 0px  !important;
@@ -195,9 +195,17 @@
   font-size: .4rem !important;
   border: none;
 }
-.dark-mode {
-  background-color: black;
-  color: white;
+.image__upload{
+  position: absolute;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+
+}
+.image-upload > input {
+  visibility:hidden;
+  width:0;
+  height:0;
 }
 @keyframes countdown {
   from {

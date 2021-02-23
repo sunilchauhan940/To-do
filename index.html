@@ -22,8 +22,10 @@
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.4/handlebars.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.6/js/bootstrap-colorpicker.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.6/css/bootstrap-colorpicker.css" rel="stylesheet">
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.6/js/bootstrap-colorpicker.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.6/css/bootstrap-colorpicker.css"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -53,11 +55,16 @@
                     <div class="input-group">
                         <input class="form-control py-2 border" type="text" placeholder="What you want to do?"
                             id="new-task-text" class="new_task_text" />
+                        <div class="image__upload">
+                            <label for="file-input">
+                                <img src="img/img-input.jpg" width="30px" height="30px" />
+                            </label>
+                            <input id="file-input" type="file" accept="image/x-png,image/gif,image/jpeg" style="cursor: pointer;  display: none" />
+                        </div>
                     </div>
                 </div>
                 <br>
-                <button class="btn btn-default empty__bin" id="empty-bin">Empty Bin <i class="fa fa-trash"
-                        aria-hidden="true"></i></button>
+                <button class="btn btn-default empty__bin" id="empty-bin">Empty Bin <i class="fa fa-trash"   aria-hidden="true"></i></button>
                 <div class="dropdown float-right">
                     <button class="btn btn-secondary dropdown-toggle bg-warning" style="border:none" type="button"
                         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -86,23 +93,55 @@
                         <script id="task-card" type="text/x-handlebars-template">
                             <div class="card">
                                 <div class="card-body text-center">
-                                    <textarea class="form-control card-text card__textarea" id="card-textarea" style="{{color}}">{{task_text}}</textarea>
+                                    <textarea class="form-control card-text card__textarea" id="card-textarea">{{task_text}}</textarea>
                                     {{#ifeq status "Pending"}}
                                     <button class="btn btn-default card__done__btn" id="done-btn" data-placement="right" title="Complete Task"><i class="fa fa-check" aria-hidden="true"></i></button>
                                     <!-- <div id="colorpicker" class="input-group colorpicker-component colorpicker"> 
                                         <input type="text" id="colorpicker-text" value="#00AABB" class="form-control" hidden/> 
                                         <span id="colorpicker-icon" class="input-group-addon colorpicker__icon"><i></i></span>
                                     </div> -->
-                                    <input type="color" class="colorpicker__icon" id="colorpicker-icon" />
+                             
+                                  
+                                        <input type="color" class="colorpicker__icon" id="colorpicker-icon" />
+                             
                                     <button class="btn btn-default card__del__btn" id="del-btn" data-placement="right" title="Delete"><i class="fa fa-trash-o fa-xs" aria-hidden="true"></i></button>
                                     {{/ifeq}}
                                     {{#ifeq status "Binned"}}
-                                    <button class="btn btn-default card__pending__btn" id="pending-btn" data-placement="right" title="Send to Pending"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default card__pending__btn" id="pending-btn" data-placement="right" title="Restore"><i class="fa fa-reply" aria-hidden="true"></i></button>
                                     <button class="btn btn-default card__del__btn" id="final-del-btn" data-placement="right" title="Delete Forever"><i class="fa fa-trash-o fa-xs" aria-hidden="true" ></i></button>
                                     {{/ifeq}}
                                     {{#ifeq status "Completed"}} 
                                     <button class="btn btn-default card__pending__btn" id="pending-btn" data-placement="right" title="Send to Pending"><i class="fa fa-reply" aria-hidden="true"></i></button>
                                     <button class="btn btn-default card__del__btn" id="del-btn" data-placement="right" title="Delete"><i class="fa fa-trash-o fa-xs" aria-hidden="true"></i></button>
+                                    {{/ifeq}}
+                                    
+                                </div>
+                        
+                            </div>
+                        </script>
+                        <script id="image-card" type="text/x-handlebars-template">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <img src="img/{{title}}"/>
+                                    {{#ifeq status "Pending"}}
+                                    <button class="btn btn-default card__done__btn" id="done-btn" data-placement="right" title="Complete Task"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <!-- <div id="colorpicker" class="input-group colorpicker-component colorpicker"> 
+                                        <input type="text" id="colorpicker-text" value="#00AABB" class="form-control" hidden/> 
+                                        <span id="colorpicker-icon" class="input-group-addon colorpicker__icon"><i></i></span>
+                                    </div> -->
+                             
+                                  
+                                        <!-- <input type="color" class="colorpicker__icon" id="colorpicker-icon" /> -->
+                             
+                                    <button class="btn btn-default card__del__btn" id="img-del-btn" data-placement="right" title="Delete"><i class="fa fa-trash-o fa-xs" aria-hidden="true"></i></button>
+                                    {{/ifeq}}
+                                    {{#ifeq status "Binned"}}
+                                    <button class="btn btn-default card__pending__btn" id="img-pending-btn" data-placement="right" title="Restore"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default card__del__btn" id="img-final-del-btn" data-placement="right" title="Delete Forever"><i class="fa fa-trash-o fa-xs" aria-hidden="true" ></i></button>
+                                    {{/ifeq}}
+                                    {{#ifeq status "Completed"}} 
+                                    <button class="btn btn-default card__pending__btn" id="img-pending-btn" data-placement="right" title="Send to Pending"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default card__del__btn" id="img-del-btn" data-placement="right" title="Delete"><i class="fa fa-trash-o fa-xs" aria-hidden="true"></i></button>
                                     {{/ifeq}}
                                 </div>
                             </div>
@@ -110,9 +149,10 @@
                     </div>
                 </div>
                 <br>
-                <!--toast-->
 
-                <div class="toast" id="toast-bin" data-delay="5000" role="alert" aria-live="assertive" aria-atomic="true">
+                <!--toast-->
+                <div class="toast" id="toast-bin" data-delay="5000" role="alert" aria-live="assertive"
+                    aria-atomic="true">
                     <div class="toast-header" style="background-color: black; color: white;">
                         <div class="toast-body toast__title">
                             Task is Binned
@@ -121,7 +161,7 @@
                         <div id="countdown" class="toast__undo__countdown">
                             <div id="countdown-number" class="toast__undo__countdown_number"></div>
                             <svg class="toast__loading__svg">
-                            <circle class="toast__loading__circle" r="15" cx="20" cy="18"></circle>
+                                <circle class="toast__loading__circle" r="15" cx="20" cy="18"></circle>
                             </svg>
                         </div>
                     </div>

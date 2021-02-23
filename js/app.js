@@ -10,7 +10,8 @@ var editTaskTitle;
 var undoTaskTitle;
 /** Handlebar Template for Card that Represents Task */
 var taskTemplate = createHandlebar("task-card");
-
+var imgtaskTemplate = createHandlebar("image-card");
+var images = new Array();
 /** Loads Web page and Initialize All Event Listeners */
 $(document).ready(function () {
 	loadTask();
@@ -22,6 +23,7 @@ $(document).ready(function () {
 		showCompleted();
 	}
 
+	$('#file-input').on('change',uploadimage)
 	$('.card-columns').on('input','#colorpicker-icon',(ev) => {
 		changecolor($(ev.target).parent().find("textarea"),$(ev.target).val())	
     });
@@ -48,13 +50,16 @@ function loadTask() {
 	var temp = JSON.parse(localStorage.getItem("To_do"));
 	for (var i in temp)
 		tasks.push(temp[i]);
+	var temp = JSON.parse(localStorage.getItem("To_do_image"));
+	for (var i in temp)
+		images.push(temp[i]);
 }
 
 /** Add new task with title defined in textarea */
 function addTask() {
 	$("#empty-bg").css("display", "none");
 	$(".card-columns").prepend(taskTemplate({ task_text: $('#new-task-text').val(), status: "Pending"}));
-	tasks.push({ title: $("#new-task-text").val(), status: "Pending",color:"#000" });
+	tasks.push({ title: $("#new-task-text").val(), status: "Pending",color:"#fff" });
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	setTextarea();
 	$("#new-task-text").val("");
@@ -135,14 +140,22 @@ function appendTask(status) {
 	var task_list = tasks.filter(obj => {
 		return obj.status === status;
 	});
+	var img_list = images.filter(obj => {
+		return obj.status === status;
+	});
+	if(task_list.length == 0 && img_list.length == 0){
+		emptyTaskList();
+	}
 	if (task_list.length != 0) {
 		for (var i = task_list.length - 1; i > -1; i--)
 			container.append(taskTemplate({ task_text: task_list[i].title, status: status }));
 		container.append('</div>');
-	} else {
-		emptyTaskList();
-	}
-	
+	} 
+	if (img_list.length != 0) {
+		for (var i = img_list.length - 1; i > -1; i--)
+			container.append(imgtaskTemplate({ title: img_list[i].title, status: status }));
+		container.append('</div>');
+	} 
 }
 
 /** Set background of page when there is no task */
@@ -193,7 +206,7 @@ function setTextarea() {
 		taskColorPicker = $(this).parent().find('#colorpicker-icon');
 		for (var i = 0; i < tasks.length; i++) {
 			if (tasks[i].title == taskTitle) {
-				this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden; color:' + tasks[i].color +';');
+				this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden; background-color:' + tasks[i].color +';');
 				taskColorPicker.val(tasks[i].color);
 				break;
 			}
@@ -288,7 +301,7 @@ function setCountdownTimer(){
  * @param {string} color - hex code of color.
 */
 function changecolor(textarea,color){
-	textarea.css("color",color);
+	textarea.css("background-color",color);
 	task_title = textarea.val();
 	for (var i = 0; i < tasks.length; i++) {
 		if (tasks[i].title == task_title) {
@@ -297,5 +310,30 @@ function changecolor(textarea,color){
 		}
 	}
 	localStorage.setItem("To_do", JSON.stringify(tasks));
+}
+
+/** Upload Image on Server */
+function uploadimage(){
+	var fd = new FormData(); 
+	var files = $('#file-input')[0].files[0]; 
+	fd.append('file', files); 
+	console.log(files);
+	images.push({ title: files.name,status: "Pending" });
+	localStorage.setItem("To_do_image", JSON.stringify(images));
+	$.ajax({ 
+		url: 'upload.php', 
+		type: 'post', 
+		data: fd, 
+		contentType: false, 
+		processData: false, 
+		success: function(response){ 
+			if(response != 0){ 
+				showPending();
+			} 
+			else{ 
+				alert('file not uploaded'); 
+			} 
+		}, 
+	}); 
 }
 
