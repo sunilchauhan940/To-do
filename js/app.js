@@ -11,7 +11,6 @@ var undoTaskTitle;
 /** Handlebar Template for Card that Represents Task */
 var taskTemplate = createHandlebar("task-card");
 var imgtaskTemplate = createHandlebar("image-card");
-var images = new Array();
 /** Loads Web page and Initialize All Event Listeners */
 $(document).ready(function () {
 	loadTask();
@@ -33,9 +32,13 @@ $(document).ready(function () {
 	$('#new-task-text').on('change', addTask);
 	$('#toast-undo-btn').on('click',undoTask);
 	$('.card-columns').on('click','#del-btn',setBinned);
+	$('.card-columns').on('click','#img-del-btn',setBinned);
 	$('.card-columns').on('click','#done-btn',setComplete);
+	$('.card-columns').on('click','#img-done-btn',setComplete);
 	$('.card-columns').on('click','#pending-btn',setPending);
+	$('.card-columns').on('click','#img-pending-btn',setPending);
 	$('.card-columns').on('click','#final-del-btn',openDeleteDialog);
+	$('.card-columns').on('click','#img-final-del-btn',openDeleteDialog);
 	$('#confirmdialog').on('click', '#confirm-del-btn', deleteTask);
 	$('#empty-bin').on('click', emptyBin);
 	$('.card-columns').on('focusin','#card-textarea',(event) => { 
@@ -50,16 +53,13 @@ function loadTask() {
 	var temp = JSON.parse(localStorage.getItem("To_do"));
 	for (var i in temp)
 		tasks.push(temp[i]);
-	var temp = JSON.parse(localStorage.getItem("To_do_image"));
-	for (var i in temp)
-		images.push(temp[i]);
 }
 
 /** Add new task with title defined in textarea */
 function addTask() {
 	$("#empty-bg").css("display", "none");
-	$(".card-columns").prepend(taskTemplate({ task_text: $('#new-task-text').val(), status: "Pending"}));
-	tasks.push({ title: $("#new-task-text").val(), status: "Pending",color:"#fff" });
+	$(".card-columns").prepend(taskTemplate({ task_text: $('#new-task-text').val(),status: "Pending"}));
+	tasks.push({ title: $("#new-task-text").val(), status: "Pending",color:"#fff",contentType: "text" });
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	setTextarea();
 	$("#new-task-text").val("");
@@ -87,7 +87,12 @@ function deleteTask() {
 
 /** Opens confirm Delete dialog*/
 function openDeleteDialog(){
-	deleteTaskTitle = $(this).parent().find("textarea").val();
+	if(this.id === "final-del-btn"){
+		deleteTaskTitle = $(this).parent().find("textarea").val();
+	}else{
+		var regex = new RegExp("img/(.*)")
+		deleteTaskTitle = $(this).parent().find("img").attr("src").match(regex)[1];
+	}
 	deleteCard = $(this).parent().parent();
 	$('#confirmdialog').modal('show');
 }
@@ -103,7 +108,12 @@ function undoTask(){
 /** Change status of current task to Binned*/
 function setBinned() {
 	var card = $(this).parent().parent();
-	undoTaskTitle = $(this).parent().find("textarea").val();
+	if(this.id === "del-btn"){
+		undoTaskTitle = $(this).parent().find("textarea").val();
+	}else{
+		var regex = new RegExp("img/(.*)")
+		undoTaskTitle = $(this).parent().find("img").attr("src").match(regex)[1];
+	}
 	changeStatus(undoTaskTitle, "Binned");
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	card.fadeOut(500, cardRemove);
@@ -114,7 +124,12 @@ function setBinned() {
 /** Change status of current task to Complete*/
 function setComplete() {
 	var card = $(this).parent().parent();
-	var title = $(this).parent().find("textarea").val();
+	if(this.id === "done-btn"){
+		title = $(this).parent().find("textarea").val();
+	}else{
+		var regex = new RegExp("img/(.*)")
+		title = $(this).parent().find("img").attr("src").match(regex)[1];
+	}
 	changeStatus(title, "Completed");
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	card.fadeOut(500, cardRemove);
@@ -123,7 +138,12 @@ function setComplete() {
 /** Change status of current task to Pending*/
 function setPending() {
 	var card = $(this).parent().parent();
-	var title = $(this).parent().find("textarea").val();
+	if(this.id === "pending-btn"){
+		var title = $(this).parent().find("textarea").val();
+	}else{
+		var regex = new RegExp("img/(.*)")
+		var title = $(this).parent().find("img").attr("src").match(regex)[1];
+	}
 	changeStatus(title, "Pending");
 	localStorage.setItem("To_do", JSON.stringify(tasks));
 	card.fadeOut(500, cardRemove);
@@ -138,22 +158,22 @@ function appendTask(status) {
 	$(".card-columns").empty();
 	var container = $(".card-columns");
 	var task_list = tasks.filter(obj => {
-		return obj.status === status;
+		return obj.status === status && obj.contentType === "text";
 	});
-	var img_list = images.filter(obj => {
-		return obj.status === status;
+	var img_list = tasks.filter(obj => {
+		return obj.status === status && obj.contentType === "img";;
 	});
 	if(task_list.length == 0 && img_list.length == 0){
 		emptyTaskList();
 	}
 	if (task_list.length != 0) {
 		for (var i = task_list.length - 1; i > -1; i--)
-			container.append(taskTemplate({ task_text: task_list[i].title, status: status }));
+			container.append(taskTemplate({ task_text: task_list[i].title,status: status }));
 		container.append('</div>');
 	} 
 	if (img_list.length != 0) {
 		for (var i = img_list.length - 1; i > -1; i--)
-			container.append(imgtaskTemplate({ title: img_list[i].title, status: status }));
+			container.append(imgtaskTemplate({ title: img_list[i].title,status: status }));
 		container.append('</div>');
 	} 
 }
@@ -178,6 +198,7 @@ function showPending() {
 /** Shows Binned tasks on page. Used in Loading Binned Task Page */
 function showBinned() {
 	$("#new-task-text").css("display", "none");
+	$("#image-upload").css("display", "none");
 	$("#empty-bin").css("display", "unset");
 	$("#title-pending").css("display", "none");
 	$("#title-bin").css("display", "block");
@@ -190,6 +211,7 @@ function showBinned() {
 /** Shows Completed tasks on page. Used in Loading Completed Task Page */
 function showCompleted() {
 	$("#new-task-text").css("display", "none");
+	$("#image-upload").css("display", "none");
 	$("#title-pending").css("display", "none");
 	$("#empty-bin").css("display", "none");
 	$("#title-bin").css("display", "none");
@@ -318,8 +340,8 @@ function uploadimage(){
 	var files = $('#file-input')[0].files[0]; 
 	fd.append('file', files); 
 	console.log(files);
-	images.push({ title: files.name,status: "Pending" });
-	localStorage.setItem("To_do_image", JSON.stringify(images));
+	tasks.push({ title: files.name, status: "Pending",contentType: "img" });
+	localStorage.setItem("To_do", JSON.stringify(tasks));
 	$.ajax({ 
 		url: 'upload.php', 
 		type: 'post', 

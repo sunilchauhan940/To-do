@@ -34,7 +34,6 @@
         <button type="button" class="navbar-toggler bg-warning" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
                 <a href="index.html" class="nav-item nav-link active" id="home-menu">Home</a>
@@ -55,7 +54,7 @@
                     <div class="input-group">
                         <input class="form-control py-2 border" type="text" placeholder="What you want to do?"
                             id="new-task-text" class="new_task_text" />
-                        <div class="image__upload">
+                        <div class="image__upload" id="image-upload">
                             <label for="file-input">
                                 <img src="img/img-input.jpg" width="30px" height="30px" />
                             </label>
@@ -100,10 +99,7 @@
                                         <input type="text" id="colorpicker-text" value="#00AABB" class="form-control" hidden/> 
                                         <span id="colorpicker-icon" class="input-group-addon colorpicker__icon"><i></i></span>
                                     </div> -->
-                             
-                                  
-                                        <input type="color" class="colorpicker__icon" id="colorpicker-icon" />
-                             
+                                    <input type="color" class="colorpicker__icon" id="colorpicker-icon" />
                                     <button class="btn btn-default card__del__btn" id="del-btn" data-placement="right" title="Delete"><i class="fa fa-trash-o fa-xs" aria-hidden="true"></i></button>
                                     {{/ifeq}}
                                     {{#ifeq status "Binned"}}
@@ -124,7 +120,7 @@
                                 <div class="card-body text-center">
                                     <img src="img/{{title}}"/>
                                     {{#ifeq status "Pending"}}
-                                    <button class="btn btn-default card__done__btn" id="done-btn" data-placement="right" title="Complete Task"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button class="btn btn-default card__done__btn" id="img-done-btn" data-placement="right" title="Complete Task"><i class="fa fa-check" aria-hidden="true"></i></button>
                                     <!-- <div id="colorpicker" class="input-group colorpicker-component colorpicker"> 
                                         <input type="text" id="colorpicker-text" value="#00AABB" class="form-control" hidden/> 
                                         <span id="colorpicker-icon" class="input-group-addon colorpicker__icon"><i></i></span>
