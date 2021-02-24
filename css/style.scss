@@ -1,0 +1,290 @@
+$background-color: transparent;
+$text-color: #000000; 
+$font-dialog-toast-card: Roboto,Arial,sans-serif;
+$font-size-card: 1rem;
+$font-size-dialog: .875rem;
+$letter-spacing-dialog: .01428571em;
+$letter-spacing-card:.00625em;
+$font-weight-card-dialog-toast:400;
+$line-height-card: 1.5rem;
+$line-height-dialog: 1.25rem;
+$font-style-card: normal;
+$font-style-toast: normal;
+
+* {
+    font-family: 'Lexend Mega', sans-serif;
+    font-style: italic;
+    font-weight: bold;
+  
+  }
+  
+  @media (min-height: 650px) {
+    .content {
+      margin-top: 50px;
+      padding: 15px;
+    }
+  }
+  
+  @media (max-height: 650px) {
+    .content {
+      margin-top: 10px;
+      padding: 10px;
+    }
+  }
+  
+  .card__done__btn, .card__pending__btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: $background-color  !important;
+    padding: 0px 3px 0px 0px !important;
+    font-size: $font-size-card !important;
+  }
+  
+  .card__del__btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: $background-color  !important;
+    padding: 0px 3px 0px 0px !important;
+    font-size: $font-size-card !important;
+  }
+  
+  .content {
+    color: $text-color;
+    height: 100%;
+  }
+  
+  .page_bg_img {
+    background-image: url(../img/note2.PNG);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 100%;
+    height: 300px;
+    background-position: center;
+  }
+  
+  .page_bg_text {
+    color: #b3b3b3;
+    font-style: normal;
+  }
+  
+  .card .card__textarea, .card .card__textarea:-moz-read-only {
+    background-color: $background-color;
+    color: $text-color;
+    letter-spacing: $letter-spacing-card;
+    font-family: $font-dialog-toast-card;
+    font-size: $font-size-card;
+    font-weight: $font-weight-card-dialog-toast;
+    line-height: $line-height-card;
+    font-style: $font-style-card;
+    border: none !important;
+    outline: none !important;
+    overflow: hidden;
+    resize: none;
+  }
+  
+  .card .card__textarea, .card .card__textarea:read-only {
+    background-color: $background-color;
+    color: $text-color;
+    letter-spacing: $letter-spacing-card;
+    font-family: $font-dialog-toast-card;
+    font-size: $font-size-card;
+    font-weight: $font-weight-card-dialog-toast;
+    line-height: $line-height-card;
+    font-style: $font-style-card;
+    border: none !important;
+    outline: none !important;
+    overflow: hidden;
+    resize: none;
+  }
+  
+  .card .card__textarea:focus {
+    border: none !important;
+    outline: none !important;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+  }
+  
+  .card {
+    -webkit-box-shadow: 1px 1px 1px rgba(204, 202, 202, 0.7);
+            box-shadow: 1px 1px 1px rgba(204, 202, 202, 0.7);
+  }
+  
+  .card-body {
+    padding: 0px  !important;
+  }
+  
+  .new_task_text {
+    background: $background-color;
+    border: 0px;
+    padding-right: 15px;
+    color: $text-color;
+    margin: 5px;
+    -webkit-box-shadow: 1px 1px 1px 1px #d8d7d7;
+            box-shadow: 1px 1px 1px 1px #d8d7d7;
+  }
+  
+  @-webkit-keyframes animate {
+    0% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.4;
+    }
+  }
+  
+  @keyframes animate {
+    0% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.4;
+    }
+  }
+  
+  .dialog__title {
+    letter-spacing: $letter-spacing-dialog;
+    font-family: $font-dialog-toast-card;
+    font-size: $font-size-dialog;
+    font-weight: $font-weight-card-dialog-toast;
+    line-height: $line-height-dialog;
+    color: #3c4043;
+    word-wrap: break-word;
+  }
+  
+  .dialog__btn {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: $text-color;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: $letter-spacing-dialog;
+    font-family: $font-dialog-toast-card;
+    font-size: $font-size-dialog;
+    font-weight: $font-weight-card-dialog-toast;
+    line-height: $line-height-dialog;
+    height: 36px;
+    padding: 8px 24px;
+    border-radius: 4px;
+  }
+  
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    width: auto;
+  }
+  
+  .toast__title {
+    letter-spacing: $letter-spacing-dialog;
+    font-family: $font-dialog-toast-card;
+    font-size: 15px;
+    font-weight: $font-weight-card-dialog-toast;
+    font-style: $font-style-toast;
+    color: #fff;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+  
+  .toast__undo__btn {
+    color: #ffbb00 !important;
+    border: none  !important;
+    outline: none  !important;
+    font-style: $font-style-toast !important;
+    background-color: $background-color  !important;
+  }
+  
+  .empty__bin {
+    background-color: white !important;
+    color: #1A73E8 !important;
+    display: none;
+    font-style: normal;
+    letter-spacing: .02085714em;
+    font-size: 14px;
+    font-weight: $font-weight-card-dialog-toast;
+    line-height: 1.25rem;
+  }
+  
+  .toast__undo__countdown {
+    position: relative;
+    margin-left: 10px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+  }
+  
+  .toast__undo__countdown_number {
+    color: white;
+    display: inline-block;
+    line-height: 40px;
+  }
+  
+  .toast__loading__svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    -webkit-transform: rotateY(-180deg) rotateZ(-90deg);
+            transform: rotateY(-180deg) rotateZ(-90deg);
+  }
+  
+  .toast__loading__circle {
+    stroke-dasharray: 10px;
+    stroke-dashoffset: 0px;
+    stroke-linecap: round;
+    stroke-width: 2px;
+    stroke: white;
+    fill: none;
+    -webkit-animation: countdown 5s linear infinite forwards;
+            animation: countdown 5s linear infinite forwards;
+  }
+  
+  .colorpicker__icon {
+    position: absolute;
+    right: 30px;
+    bottom: 1px;
+    background-color: $background-color  !important;
+    padding: 0px 3px 0px 0px !important;
+    font-size: .4rem !important;
+    border: none;
+  }
+  
+  .image__upload {
+    position: absolute;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .image-upload > input {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+  
+  @-webkit-keyframes countdown {
+    from {
+      stroke-dashoffset: 0px;
+    }
+    to {
+      stroke-dashoffset: 66px;
+    }
+  }
+  
+  @keyframes countdown {
+    from {
+      stroke-dashoffset: 0px;
+    }
+    to {
+      stroke-dashoffset: 66px;
+    }
+  }
+  
